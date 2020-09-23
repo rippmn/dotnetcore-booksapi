@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using BooksApi.Models;
 using BooksApi.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace BooksApi
 {
@@ -34,6 +35,12 @@ namespace BooksApi
            sp.GetRequiredService<IOptions<BookstoreDatabaseSettings>>().Value);
 
 	   services.AddSingleton<BookService>();
+
+	   var sqlConnectionString = "Server=127.0.0.1;Port=5432;Database=postgres;User Id=postgres;Password=mysecretpassword;";
+
+           services.AddDbContext<PostgreSqlContext>(options => options.UseNpgsql(sqlConnectionString));
+
+           services.AddScoped<IAuthorService, AuthorService>();
            
 	   services.AddControllers();
         }
